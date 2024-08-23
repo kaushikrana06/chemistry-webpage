@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Typography, Box, TextField, Button, Modal, Backdrop, Fade, Snackbar, Alert } from '@mui/material';
 import { motion } from 'framer-motion';
 import ScienceIcon from '@mui/icons-material/Science';
@@ -31,6 +31,25 @@ const HomePage = () => {
     const [open, setOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    // Memoize the positions so they don't change on re-renders
+    const memoizedChemistryElements = useMemo(() => 
+        chemistryElements.map((element) => ({
+            ...element,
+            position: getRandomPosition(),
+        })),
+    []);
+
+    const memoizedGifPositions = useMemo(() => 
+        [
+            { id: 1, gif: "/molecule1.gif" },
+            { id: 2, gif: "/molecule2.gif" },
+            { id: 3, gif: "/molecule3.gif" },
+        ].map((item) => ({
+            ...item,
+            position: getRandomPosition(),
+        })),
+    []);
 
     // Handle search and show Snackbar if no match is found
     const handleSearch = () => {
@@ -130,34 +149,31 @@ const HomePage = () => {
             </Box>
 
             {/* Animated Chemistry Icons with Random Positions */}
-            {chemistryElements.map((element) => {
-                const randomPosition = getRandomPosition();
-                return (
-                    <motion.div
-                        key={element.id}
-                        initial={{ opacity: 0, y: -200 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 2 + Math.random() * 2, repeat: Infinity, repeatType: "reverse" }}
-                        style={{
-                            position: 'absolute',
-                            top: randomPosition.top,
-                            left: randomPosition.left,
-                            color: 'white',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            fontSize: '1.2rem',
-                            cursor: 'pointer',
-                        }}
-                        whileHover={{ scale: 1.2 }}
-                    >
-                        {element.icon}
-                        <Typography variant="caption" sx={{ color: '#FFF' }}>
-                            {element.name}
-                        </Typography>
-                    </motion.div>
-                );
-            })}
+            {memoizedChemistryElements.map((element) => (
+                <motion.div
+                    key={element.id}
+                    initial={{ opacity: 0, y: -200 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 2 + Math.random() * 2, repeat: Infinity, repeatType: "reverse" }}
+                    style={{
+                        position: 'absolute',
+                        top: element.position.top,
+                        left: element.position.left,
+                        color: 'white',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                    }}
+                    whileHover={{ scale: 1.2 }}
+                >
+                    {element.icon}
+                    <Typography variant="caption" sx={{ color: '#FFF' }}>
+                        {element.name}
+                    </Typography>
+                </motion.div>
+            ))}
 
             {/* Modal to Display Synthesis Image */}
             <Modal
@@ -239,39 +255,32 @@ const HomePage = () => {
                 </Alert>
             </Snackbar>
 
-            {/* First Animated Molecular GIF */}
-            {[
-                { id: 1, gif: "/molecule1.gif" },
-                { id: 2, gif: "/molecule2.gif" },
-                { id: 3, gif: "/molecule3.gif" },
-            ].map((item) => {
-                const randomPosition = getRandomPosition();
-                return (
-                    <Box
-                        key={item.id}
-                        sx={{
-                            position: 'absolute',
-                            top: randomPosition.top,
-                            left: randomPosition.left,
-                            width: '150px',
-                            height: '150px',
+            {/* Animated Molecular GIFs with Random Positions */}
+            {memoizedGifPositions.map((item) => (
+                <Box
+                    key={item.id}
+                    sx={{
+                        position: 'absolute',
+                        top: item.position.top,
+                        left: item.position.left,
+                        width: '150px',
+                        height: '150px',
+                    }}
+                >
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, rotate: 360 }}
+                        transition={{ duration: 5, repeat: Infinity }}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            background: `url(${item.gif}) no-repeat center`,
+                            backgroundSize: 'contain',
+                            mixBlendMode: 'multiply',
                         }}
-                    >
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1, rotate: 360 }}
-                            transition={{ duration: 5, repeat: Infinity }}
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                background: `url(${item.gif}) no-repeat center`,
-                                backgroundSize: 'contain',
-                                mixBlendMode: 'multiply',
-                            }}
-                        />
-                    </Box>
-                );
-            })}
+                    />
+                </Box>
+            ))}
         </Box>
     );
 };

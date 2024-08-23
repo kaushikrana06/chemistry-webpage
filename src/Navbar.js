@@ -7,7 +7,7 @@ const Navbar = () => {
         <AppBar
             position="static"
             sx={{
-                backgroundColor: 'rgba(51, 51, 51, 0.8)', // Translucent background
+                backgroundColor: 'rgba(0, 0, 0, 0.4)', // Translucent background
                 backdropFilter: 'blur(10px)', // Blur effect for better translucency
                 boxShadow: 'none', // Remove default shadow for a sleeker look
             }}
@@ -19,7 +19,7 @@ const Navbar = () => {
                         flexGrow: 1,
                         fontFamily: "'Qwitcher Grypen', cursive", // Apply custom font
                         fontWeight: 'bold',
-                        color: '#FFFFFF', // White color for text
+                        color: '#FFFFF', // White color for text
                     }}
                 >
                     Transforming Elements: The Power of Synthesis
