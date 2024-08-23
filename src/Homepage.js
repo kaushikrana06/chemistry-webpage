@@ -3,7 +3,6 @@ import { Typography, Box, TextField, Button, Modal, Backdrop, Fade, Snackbar, Al
 import { motion } from 'framer-motion';
 import ScienceIcon from '@mui/icons-material/Science';
 
-// Sample chemistry elements for random animations
 const chemistryElements = [
     { id: 1, icon: <ScienceIcon fontSize="large" />, name: "H₂O" },
     { id: 2, icon: <ScienceIcon fontSize="large" />, name: "CO₂" },
@@ -11,15 +10,12 @@ const chemistryElements = [
     { id: 4, icon: <ScienceIcon fontSize="large" />, name: "CH₄" },
 ];
 
-// Syntheses data with corresponding image paths
 const syntheses = {
     "Grignard Synthesis": "/grignard.jpg",
     "Diels-Alder Reaction": "/diels-alder.jpg",
     "Friedel-Crafts Alkylation": "/friedel-crafts.jpg",
-    // Add more synthesis names and image paths here
 };
 
-// Utility function to generate random position percentages
 const getRandomPosition = () => ({
     top: `${Math.random() * 80}%`,
     left: `${Math.random() * 80}%`,
@@ -32,7 +28,6 @@ const HomePage = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    // Memoize the positions so they don't change on re-renders
     const memoizedChemistryElements = useMemo(() => 
         chemistryElements.map((element) => ({
             ...element,
@@ -51,11 +46,10 @@ const HomePage = () => {
         })),
     []);
 
-    // Handle search and show Snackbar if no match is found
     const handleSearch = () => {
         const normalizedQuery = searchQuery.toLowerCase();
         const matchingSynthesis = Object.keys(syntheses).find(
-            (synthesis) => synthesis.toLowerCase() === normalizedQuery
+            (synthesis) => synthesis.toLowerCase().includes(normalizedQuery)
         );
 
         if (matchingSynthesis) {
@@ -63,7 +57,7 @@ const HomePage = () => {
             setOpen(true);
         } else {
             setSnackbarMessage("Synthesis not found. Please try again.");
-            setSnackbarOpen(true); // Show the Snackbar
+            setSnackbarOpen(true);
         }
     };
 
@@ -89,7 +83,6 @@ const HomePage = () => {
                 overflow: 'hidden',
             }}
         >
-            {/* Welcome Text */}
             <motion.div
                 initial={{ y: -50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -104,14 +97,13 @@ const HomePage = () => {
                         textAlign: 'center',
                         fontSize: '3rem',
                         textShadow: '2px 2px 4px #000000',
-                        zIndex: 2, // Ensure the text is above other elements
+                        zIndex: 2,
                     }}
                 >
                     Unlock the Blueprints of Molecular Creation
                 </Typography>
             </motion.div>
 
-            {/* Search Bar and Button */}
             <Box
                 sx={{
                     display: 'flex',
@@ -148,7 +140,6 @@ const HomePage = () => {
                 </Button>
             </Box>
 
-            {/* Animated Chemistry Icons with Random Positions */}
             {memoizedChemistryElements.map((element) => (
                 <motion.div
                     key={element.id}
@@ -175,7 +166,6 @@ const HomePage = () => {
                 </motion.div>
             ))}
 
-            {/* Modal to Display Synthesis Image */}
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -192,14 +182,17 @@ const HomePage = () => {
                             top: '50%',
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '60%',
-                            height: '60%',
+                            width: { xs: '90%', sm: '70%', md: '60%', lg: '50%' },
+                            maxHeight: '80vh',
                             bgcolor: 'background.paper',
                             boxShadow: 24,
-                            p: 4,
+                            p: 2,  // Adjusted padding for all screen sizes
                             borderRadius: '8px',
                             textAlign: 'center',
-                            overflow: 'hidden', // Ensures the pseudo-element stays within the box boundaries
+                            overflow: 'auto',  // Enable scrolling if the content overflows
+                            display: 'flex',  // Flexbox to center the image vertically
+                            flexDirection: 'column',
+                            alignItems: 'center',
                             '&::before': {
                                 content: '""',
                                 position: 'absolute',
@@ -209,8 +202,8 @@ const HomePage = () => {
                                 height: '100%',
                                 background: 'url("/backimg.jpg") no-repeat center center fixed',
                                 backgroundSize: 'cover',
-                                filter: 'blur(8px)', // Apply blur effect
-                                zIndex: -1, // Ensure it stays behind the content
+                                filter: 'blur(8px)',
+                                zIndex: -1,
                             },
                         }}
                     >
@@ -218,10 +211,10 @@ const HomePage = () => {
                             variant="h4"
                             sx={{
                                 marginBottom: '10px',
-                                fontFamily: "'Bebas Neue', sans-serif",  // Apply Bebas Neue font
-                                fontWeight: 'bold',  // Make the text bold
-                                color: '#333',  // Darker text color for contrast
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',  // Add a subtle drop shadow
+                                fontFamily: "'Bebas Neue', sans-serif",
+                                fontWeight: 'bold',
+                                color: '#333',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
                                 letterSpacing: '0.3em',
                             }}
                         >
@@ -235,15 +228,18 @@ const HomePage = () => {
                             sx={{
                                 width: 'auto',
                                 height: 'auto',
-                                borderRadius: '15px',
+                                maxWidth: '100%',
+                                maxHeight: '100%',
+                                borderRadius: '8px',
+                                objectFit: 'contain',
                                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                                marginBottom: '20px',  // Margin to ensure spacing at the bottom
                             }}
                         />
                     </Box>
                 </Fade>
             </Modal>
 
-            {/* Snackbar for No Match Found */}
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={3000}
@@ -255,7 +251,6 @@ const HomePage = () => {
                 </Alert>
             </Snackbar>
 
-            {/* Animated Molecular GIFs with Random Positions */}
             {memoizedGifPositions.map((item) => (
                 <Box
                     key={item.id}
