@@ -1,7 +1,23 @@
 import React, { useState, useMemo } from 'react';
-import { Typography, Box, TextField, Button, Modal, Backdrop, Fade, Snackbar, Alert } from '@mui/material';
+import { Typography, Box, TextField, Button, Modal, Backdrop, Fade, Snackbar, Alert, Autocomplete } from '@mui/material';
 import { motion } from 'framer-motion';
 import ScienceIcon from '@mui/icons-material/Science';
+
+const categories = {
+    "Endogenous Catecholamines": [
+        { name: "Norepinephrine", image: "/norepinephrine.jpg" },
+        { name: "Epinephrine", image: "/epinephrin.jpg" },
+        { name: "Dopamine", image: "/dopamine.jpg" },
+    ],
+    // "Organic Chemistry": [
+    //     { name: "Grignard Synthesis", image: "/grignard.jpg" },
+    //     { name: "Diels-Alder Reaction", image: "/diels-alder.jpg" },
+    // ],
+    // "Inorganic Chemistry": [
+    //     { name: "Friedel-Crafts Alkylation", image: "/friedel-crafts.jpg" },
+    // ],
+    // // Add more categories and reactions as needed
+};
 
 const chemistryElements = [
     { id: 1, icon: <ScienceIcon fontSize="large" />, name: "H₂O" },
@@ -10,11 +26,11 @@ const chemistryElements = [
     { id: 4, icon: <ScienceIcon fontSize="large" />, name: "CH₄" },
 ];
 
-const syntheses = {
-    "Grignard Synthesis": "/grignard.jpg",
-    "Diels-Alder Reaction": "/diels-alder.jpg",
-    "Friedel-Crafts Alkylation": "/friedel-crafts.jpg",
-};
+const gifElements = [
+    { id: 1, gif: "/molecule1.gif" },
+    { id: 2, gif: "/molecule2.gif" },
+    { id: 3, gif: "/molecule3.gif" },
+];
 
 const getRandomPosition = () => ({
     top: `${Math.random() * 80}%`,
@@ -22,48 +38,43 @@ const getRandomPosition = () => ({
 });
 
 const HomePage = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedSynthesis, setSelectedSynthesis] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedReaction, setSelectedReaction] = useState(null);
     const [open, setOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    const memoizedChemistryElements = useMemo(() => 
-        chemistryElements.map((element) => ({
-            ...element,
-            position: getRandomPosition(),
-        })),
-    []);
+    // Memoize positions so they don't change on every render
+    const memoizedChemistryElements = useMemo(() => chemistryElements.map((element) => ({
+        ...element,
+        position: getRandomPosition(),
+    })), []);
 
-    const memoizedGifPositions = useMemo(() => 
-        [
-            { id: 1, gif: "/molecule1.gif" },
-            { id: 2, gif: "/molecule2.gif" },
-            { id: 3, gif: "/molecule3.gif" },
-        ].map((item) => ({
-            ...item,
-            position: getRandomPosition(),
-        })),
-    []);
+    const memoizedGifElements = useMemo(() => gifElements.map((item) => ({
+        ...item,
+        position: getRandomPosition(),
+    })), []);
+
+    const handleCategoryChange = (event, value) => {
+        setSelectedCategory(value);
+        setSelectedReaction(null); // Reset the reaction dropdown when a new category is selected
+    };
+
+    const handleReactionChange = (event, value) => {
+        setSelectedReaction(value);
+    };
 
     const handleSearch = () => {
-        const normalizedQuery = searchQuery.toLowerCase();
-        const matchingSynthesis = Object.keys(syntheses).find(
-            (synthesis) => synthesis.toLowerCase().includes(normalizedQuery)
-        );
-
-        if (matchingSynthesis) {
-            setSelectedSynthesis(matchingSynthesis);
+        if (selectedReaction) {
             setOpen(true);
         } else {
-            setSnackbarMessage("Synthesis not found. Please try again.");
+            setSnackbarMessage("Please select a reaction.");
             setSnackbarOpen(true);
         }
     };
 
     const handleClose = () => {
         setOpen(false);
-        setSelectedSynthesis(null);
     };
 
     const handleSnackbarClose = () => {
@@ -90,7 +101,6 @@ const HomePage = () => {
             >
                 <Typography
                     variant="h2"
-                    className="qwitcher-grypen-bold"
                     sx={{
                         color: '#FFFFFF',
                         marginBottom: '20px',
@@ -107,29 +117,95 @@ const HomePage = () => {
             <Box
                 sx={{
                     display: 'flex',
+                    flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
                     width: '100%',
-                    maxWidth: '600px',
+                    maxWidth: '400px',
                     marginBottom: '20px',
+                    gap: 2,
                 }}
             >
-                <TextField
-                    variant="outlined"
-                    fullWidth
-                    placeholder="Enter synthesis name..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    sx={{
-                        backgroundColor: '#fff',
-                        borderRadius: '4px',
-                    }}
+                <Autocomplete
+                    options={Object.keys(categories)}
+                    getOptionLabel={(option) => option}
+                    onChange={handleCategoryChange}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Choose Category"
+                            variant="outlined"
+                            placeholder="Select a category..."
+                            sx={{
+                                backgroundColor: '#fff',
+                                borderRadius: '4px',
+                                '& .MuiInputLabel-root': {
+                                    color: '#000',  // Dark label color
+                                    fontWeight: 'bold',  // Bold label text
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: '#333',  // Even darker color when focused
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#333',  // Darker border when active
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#333',  // Darker border on hover
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#333',  // Darker border when focused
+                                    },
+                                },
+                            }}
+                        />
+                    )}
+                    sx={{ width: '100%' }}
                 />
+
+                {selectedCategory && (
+                    <Autocomplete
+                        options={categories[selectedCategory]}
+                        getOptionLabel={(option) => option.name}
+                        onChange={handleReactionChange}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Choose Reaction"
+                                variant="outlined"
+                                placeholder="Select a reaction..."
+                                sx={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: '4px',
+                                    '& .MuiInputLabel-root': {
+                                        color: '#000',  // Dark label color
+                                        fontWeight: 'bold',  // Bold label text
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#333',  // Even darker color when focused
+                                    },
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: '#333',  // Darker border when active
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: '#333',  // Darker border on hover
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#333',  // Darker border when focused
+                                        },
+                                    },
+                                }}
+                            />
+                        )}
+                        sx={{ width: '100%' }}
+                    />
+                )}
+
                 <Button
                     variant="contained"
                     onClick={handleSearch}
                     sx={{
-                        marginLeft: '10px',
                         backgroundColor: '#FF8E53',
                         '&:hover': {
                             backgroundColor: '#FF7643',
@@ -166,92 +242,7 @@ const HomePage = () => {
                 </motion.div>
             ))}
 
-            <Modal
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}
-            >
-                <Fade in={open}>
-                    <Box
-                        sx={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: { xs: '90%', sm: '70%', md: '60%', lg: '50%' },
-                            maxHeight: '80vh',
-                            bgcolor: 'background.paper',
-                            boxShadow: 24,
-                            p: 2,  // Adjusted padding for all screen sizes
-                            borderRadius: '8px',
-                            textAlign: 'center',
-                            overflow: 'auto',  // Enable scrolling if the content overflows
-                            display: 'flex',  // Flexbox to center the image vertically
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            '&::before': {
-                                content: '""',
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: '100%',
-                                background: 'url("/backimg.jpg") no-repeat center center fixed',
-                                backgroundSize: 'cover',
-                                filter: 'blur(8px)',
-                                zIndex: -1,
-                            },
-                        }}
-                    >
-                        <Typography
-                            variant="h4"
-                            sx={{
-                                marginBottom: '10px',
-                                fontFamily: "'Bebas Neue', sans-serif",
-                                fontWeight: 'bold',
-                                color: '#333',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
-                                letterSpacing: '0.3em',
-                            }}
-                        >
-                            {selectedSynthesis}
-                        </Typography>
-
-                        <Box
-                            component="img"
-                            src={syntheses[selectedSynthesis]}
-                            alt={selectedSynthesis}
-                            sx={{
-                                width: 'auto',
-                                height: 'auto',
-                                maxWidth: '100%',
-                                maxHeight: '100%',
-                                borderRadius: '8px',
-                                objectFit: 'contain',
-                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                                marginBottom: '20px',  // Margin to ensure spacing at the bottom
-                            }}
-                        />
-                    </Box>
-                </Fade>
-            </Modal>
-
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={3000}
-                onClose={handleSnackbarClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            >
-                <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: '100%' }}>
-                    {snackbarMessage}
-                </Alert>
-            </Snackbar>
-
-            {memoizedGifPositions.map((item) => (
+            {memoizedGifElements.map((item) => (
                 <Box
                     key={item.id}
                     sx={{
@@ -276,6 +267,89 @@ const HomePage = () => {
                     />
                 </Box>
             ))}
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={open}>
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: { xs: '90%', sm: '70%', md: '60%', lg: '50%' },
+                            maxHeight: '80vh',
+                            bgcolor: 'background.paper',
+                            boxShadow: 24,
+                            p: 2,
+                            borderRadius: '8px',
+                            textAlign: 'center',
+                            overflow: 'auto',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            '&::before': {
+                                content: '""',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                background: 'url("/backimg.jpg") no-repeat center center fixed',
+                                backgroundSize: 'cover',
+                                filter: 'blur(8px)',
+                                zIndex: -1,
+                            },
+                        }}
+                    >
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                marginBottom: '10px',
+                                fontFamily: "'Bebas Neue', sans-serif",
+                                fontWeight: 'bold',
+                                color: '#333',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+                            }}
+                        >
+                            {selectedReaction?.name}
+                        </Typography>
+
+                        <Box
+                            component="img"
+                            src={selectedReaction?.image}
+                            alt={selectedReaction?.name}
+                            sx={{
+                                width: 'auto',
+                                height: 'auto',
+                                maxWidth: '100%',
+                                maxHeight: '100%',
+                                borderRadius: '8px',
+                                objectFit: 'contain',
+                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                            }}
+                        />
+                    </Box>
+                </Fade>
+            </Modal>
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: '100%' }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };
