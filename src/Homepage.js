@@ -9,6 +9,16 @@ const categories = {
         { name: "Epinephrine", image: "/epinephrin.jpg" },
         { name: "Dopamine", image: "/dopamine.jpg" },
     ],
+    "Drugs Affecting Norepinephrine Release": [
+    { "name": "Amphetamine", "image": "/amphetamine.jpg" },
+    { "name": "Benzphetamine", "image": "/benzphetamine.jpg" },
+    { "name": "Hydroxyamphetamine", "image": "/hydroxyamphetamine.jpg" },
+    { "name": "Methamphetamine", "image": "/methamphetamine.jpg" },
+    { "name": "Phentermine", "image": "/phentermine.jpg" },
+    { "name": "Chlorphentermine", "image": "/chlorphentermine.jpg" },
+    { "name": "Mephentermine", "image": "/mephentermine.jpg" }
+],
+
     // "Organic Chemistry": [
     //     { name: "Grignard Synthesis", image: "/grignard.jpg" },
     //     { name: "Diels-Alder Reaction", image: "/diels-alder.jpg" },
