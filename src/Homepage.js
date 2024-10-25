@@ -4,29 +4,42 @@ import { motion } from 'framer-motion';
 import ScienceIcon from '@mui/icons-material/Science';
 
 const categories = {
-    "Endogenous Catecholamines": [
-        { name: "Norepinephrine", image: "/norepinephrine.jpg" },
-        { name: "Epinephrine", image: "/epinephrin.jpg" },
-        { name: "Dopamine", image: "/dopamine.jpg" },
-    ],
-    "Drugs Affecting Norepinephrine Release": [
-    { "name": "Amphetamine", "image": "/amphetamine.jpg" },
-    { "name": "Benzphetamine", "image": "/benzphetamine.jpg" },
-    { "name": "Hydroxyamphetamine", "image": "/hydroxyamphetamine.jpg" },
-    { "name": "Methamphetamine", "image": "/methamphetamine.jpg" },
-    { "name": "Phentermine", "image": "/phentermine.jpg" },
-    { "name": "Chlorphentermine", "image": "/chlorphentermine.jpg" },
-    { "name": "Mephentermine", "image": "/mephentermine.jpg" }
-],
-
-    // "Organic Chemistry": [
-    //     { name: "Grignard Synthesis", image: "/grignard.jpg" },
-    //     { name: "Diels-Alder Reaction", image: "/diels-alder.jpg" },
-    // ],
-    // "Inorganic Chemistry": [
-    //     { name: "Friedel-Crafts Alkylation", image: "/friedel-crafts.jpg" },
-    // ],
-    // // Add more categories and reactions as needed
+    "Endogenous Catecholamines": {
+        subcategories: null,
+        reactions: [
+            { name: "Norepinephrine", image: "/norepinephrine.jpg" },
+            { name: "Epinephrine", image: "/epinephrin.jpg" },
+            { name: "Dopamine", image: "/dopamine.jpg" },
+        ]
+    },
+    "Drugs Affecting Norepinephrine Release": {
+        subcategories: {
+            "Indirect acting Sympathomimetics": [
+                { name: "Amphetamine", image: "/amphetamine.jpg" },
+                { name: "Benzphetamine", image: "/benzphetamine.jpg" },
+                { name: "Hydroxyamphetamine", image: "/hydroxyamphetamine.jpg" },
+                { name: "Methamphetamine", image: "/methamphetamine.jpg" },
+                { name: "Phentermine", image: "/phentermine.jpg" },
+                { name: "Chlorphentermine", image: "/chlorphentermine.jpg" },
+                { name: "Mephentermine", image: "/mephentermine.jpg" }
+            ],
+            "Sympathomimetics with mixed actions": [
+                { name: "Ephedrine", image: "/ephedrine.jpg" },
+                { name: "Metaraminol", image: "/metaraminol.jpg" },
+                { name: "Phenylethanolamine", image: "/phenylethanolamine.jpg" },
+                { name: "Phenylpropanolamine", image: "/phenylpropanolamine.jpg" },
+                { name: "Tyramine", image: "/tyramine.jpg" },
+                { name: "Methoxamine", image: "/methoxamine.jpg" },
+                { name: "Phenylephrine", image: "/phenylephrine.jpg" },
+                { name: "Naphazoline", image: "/naphazoline.jpg" },
+                { name: "Oxymetazoline", image: "/oxymetazoline.jpg" },
+                { name: "Etilefrine", image: "/etilefrine.jpg" },
+                { name: "Tetrahydrozoline", image: "/tetrahydrozoline.jpg" },
+                { name: "Xylometazoline", image: "/xylometazoline.jpg" },
+                { name: "Ibopamine", image: "/ibopamine.jpg" }
+            ]
+        }
+    }
 };
 
 const chemistryElements = [
@@ -49,12 +62,12 @@ const getRandomPosition = () => ({
 
 const HomePage = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
     const [selectedReaction, setSelectedReaction] = useState(null);
     const [open, setOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    // Memoize positions so they don't change on every render
     const memoizedChemistryElements = useMemo(() => chemistryElements.map((element) => ({
         ...element,
         position: getRandomPosition(),
@@ -67,7 +80,13 @@ const HomePage = () => {
 
     const handleCategoryChange = (event, value) => {
         setSelectedCategory(value);
-        setSelectedReaction(null); // Reset the reaction dropdown when a new category is selected
+        setSelectedSubcategory(null); // Clear subcategory when category changes
+        setSelectedReaction(null); // Clear reaction when category changes
+    };
+
+    const handleSubcategoryChange = (event, value) => {
+        setSelectedSubcategory(value);
+        setSelectedReaction(null); // Clear reaction when subcategory changes
     };
 
     const handleReactionChange = (event, value) => {
@@ -90,6 +109,12 @@ const HomePage = () => {
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
     };
+
+    const selectedCategoryData = selectedCategory ? categories[selectedCategory] : null;
+    const subcategoryOptions = selectedCategoryData?.subcategories ? Object.keys(selectedCategoryData.subcategories) : [];
+    const reactionOptions = selectedCategoryData?.subcategories && selectedSubcategory
+        ? selectedCategoryData.subcategories[selectedSubcategory]
+        : selectedCategoryData?.reactions || [];
 
     return (
         <Box
@@ -140,6 +165,7 @@ const HomePage = () => {
                     options={Object.keys(categories)}
                     getOptionLabel={(option) => option}
                     onChange={handleCategoryChange}
+                    value={selectedCategory}
                     renderInput={(params) => (
                         <TextField
                             {...params}
@@ -150,22 +176,16 @@ const HomePage = () => {
                                 backgroundColor: '#fff',
                                 borderRadius: '4px',
                                 '& .MuiInputLabel-root': {
-                                    color: '#000',  // Dark label color
-                                    fontWeight: 'bold',  // Bold label text
+                                    color: '#000',
+                                    fontWeight: 'bold',
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: '#333',  // Even darker color when focused
+                                    color: '#333',
                                 },
                                 '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: '#333',  // Darker border when active
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: '#333',  // Darker border on hover
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#333',  // Darker border when focused
-                                    },
+                                    '& fieldset': { borderColor: '#333' },
+                                    '&:hover fieldset': { borderColor: '#333' },
+                                    '&.Mui-focused fieldset': { borderColor: '#333' },
                                 },
                             }}
                         />
@@ -173,37 +193,32 @@ const HomePage = () => {
                     sx={{ width: '100%' }}
                 />
 
-                {selectedCategory && (
+                {selectedCategoryData?.subcategories && (
                     <Autocomplete
-                        options={categories[selectedCategory]}
-                        getOptionLabel={(option) => option.name}
-                        onChange={handleReactionChange}
+                        options={subcategoryOptions}
+                        getOptionLabel={(option) => option}
+                        onChange={handleSubcategoryChange}
+                        value={selectedSubcategory}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                label="Choose Reaction"
+                                label="Choose Subcategory"
                                 variant="outlined"
-                                placeholder="Select a reaction..."
+                                placeholder="Select a subcategory..."
                                 sx={{
                                     backgroundColor: '#fff',
                                     borderRadius: '4px',
                                     '& .MuiInputLabel-root': {
-                                        color: '#000',  // Dark label color
-                                        fontWeight: 'bold',  // Bold label text
+                                        color: '#000',
+                                        fontWeight: 'bold',
                                     },
                                     '& .MuiInputLabel-root.Mui-focused': {
-                                        color: '#333',  // Even darker color when focused
+                                        color: '#333',
                                     },
                                     '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: '#333',  // Darker border when active
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: '#333',  // Darker border on hover
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: '#333',  // Darker border when focused
-                                        },
+                                        '& fieldset': { borderColor: '#333' },
+                                        '&:hover fieldset': { borderColor: '#333' },
+                                        '&.Mui-focused fieldset': { borderColor: '#333' },
                                     },
                                 }}
                             />
@@ -212,19 +227,51 @@ const HomePage = () => {
                     />
                 )}
 
+                <Autocomplete
+                    options={reactionOptions}
+                    getOptionLabel={(option) => option.name}
+                    onChange={handleReactionChange}
+                    value={selectedReaction}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Choose Reaction"
+                            variant="outlined"
+                            placeholder="Select a reaction..."
+                            sx={{
+                                backgroundColor: '#fff',
+                                borderRadius: '4px',
+                                '& .MuiInputLabel-root': {
+                                    color: '#000',
+                                    fontWeight: 'bold',
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: '#333',
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': { borderColor: '#333' },
+                                    '&:hover fieldset': { borderColor: '#333' },
+                                    '&.Mui-focused fieldset': { borderColor: '#333' },
+                                },
+                            }}
+                        />
+                    )}
+                    sx={{ width: '100%' }}
+                />
+
                 <Button
                     variant="contained"
                     onClick={handleSearch}
                     sx={{
                         backgroundColor: '#FF8E53',
-                        '&:hover': {
-                            backgroundColor: '#FF7643',
-                        },
+                        '&:hover': { backgroundColor: '#FF7643' },
                     }}
                 >
                     Search
                 </Button>
             </Box>
+
+            {/* Animations and Modal remain the same */}
 
             {memoizedChemistryElements.map((element) => (
                 <motion.div
@@ -283,9 +330,7 @@ const HomePage = () => {
                 onClose={handleClose}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}
+                BackdropProps={{ timeout: 500 }}
             >
                 <Fade in={open}>
                     <Box
