@@ -39,6 +39,91 @@ const categories = {
                 { name: "Ibopamine", image: "/ibopamine.jpg" }
             ]
         }
+    },
+    "Drugs Acting on Adrenergic Receptors": {
+        subcategories: {
+            "Antihypertensive Drugs": [
+                { name: "Clonidine", image: "/clonidine.jpg" },
+                { name: "Apraclonidine", image: "/apraclonidine.jpg" },
+                { name: "Brimonidine", image: "/brimonidine.jpg" },
+                { name: "Guanabenz", image: "/guanabenz.jpg" },
+                { name: "Guanafacine", image: "/guanafacine.jpg" },
+                { name: "Methyldopate Hydrochloride", image: "/methyldopate Hydrochloride.jpg" },
+                { name: "Octodrine", image: "/octodrine.jpg" },
+                { name: "Oxedrine", image: "/oxedrine.jpg" },
+                { name: "Oxolefrine", image: "/oxolefrine.jpg" },
+                { name: "Amezinium", image: "/amezinium.jpg" },
+                { name: "Arbutamine", image: "/arbutamine.jpg" },
+                { name: "Midodrine", image: "/midodrine.jpg" },
+                { name: "Denopamine", image: "/denopamine.jpg" },
+                { name: "Prenalterol", image: "/prenalterol.jpg" },
+                { name: "Xamolterol", image: "/xamolterol.jpg" }
+            ],
+            "β-1 and β-2 Blockers": [
+                { name: "Isoproterenol", image: "/isoproterenol.jpg" },
+                { name: "Dobutamine", image: "/dobutamine.jpg" }
+            ],
+            "β-2 Agonists": [
+                { name: "Metaproterenol", image: "/metaproterenol.jpg" },
+                { name: "Terbutaline", image: "/terbutaline.jpg" },
+                { name: "Salbutamol", image: "/salbutamol.jpg" },
+                { name: "Salmeterol", image: "/salmeterol.jpg" },
+                { name: "Pirbuterol", image: "/pirbuterol.jpg" },
+                { name: "Bitolterol", image: "/bitolterol.jpg" },
+                { name: "Ethylnorepinephrine", image: "/ethylnorepinephrine.jpg" },
+                { name: "Isoetharine", image: "/isoetharine.jpg" }
+            ],
+            "α-1 Blockers": [
+                { name: "Prazosin", image: "/prazosin.jpg" },
+                { name: "Terazosin", image: "/terazosin.jpg" },
+                { name: "Doxazosin", image: "/doxazosin.jpg" },
+                { name: "Bunazosin", image: "/bunazosin.jpg" },
+                { name: "Indoramin", image: "/indoramin.jpg" },
+                { name: "Moxisylyte", image: "/moxisylyte.jpg" },
+                { name: "Urapidil", image: "/urapidil.jpg" }
+            ],
+            "Non-Specific α-2 Antagonists": [
+                { name: "Phenoxybenzamine", image: "/phenoxybenzamine.jpg" },
+                { name: "Phentolamine", image: "/phentolamine.jpg" },
+                { name: "Tolazoline", image: "/tolazoline.jpg" }
+            ],
+            "Selective β-1 Antagonists": [
+                { name: "Acebutolol", image: "/acebutolol.jpg" },
+                { name: "Atenolol", image: "/atenolol.jpg" },
+                { name: "Betaxolol", image: "/betaxolol.jpg" },
+                { name: "Bisoprolol", image: "/bisoprolol.jpg" },
+                { name: "Esmolol", image: "/esmolol.jpg" },
+                { name: "Metoprolol", image: "/metoprolol.jpg" },
+                { name: "Practolol", image: "/practolol.jpg" },
+                { name: "Alprenolol", image: "/alprenolol.jpg" },
+                { name: "Landiolol", image: "/landiolol.jpg" },
+                { name: "Arotinolol", image: "/arotinolol.jpg" },
+                { name: "Mepindolol", image: "/mepindolol.jpg" },
+                { name: "Bevantolol", image: "/bevantolol.jpg" },
+                { name: "Nebivolol", image: "/nebivolol.jpg" },
+                { name: "Oxprenolol", image: "/oxprenolol.jpg" },
+                { name: "Bopindolol", image: "/bopindolol.jpg" },
+                { name: "Bucindolol", image: "/bucindolol.jpg" },
+                { name: "S-Bupranolol", image: "/s-bupranolol.jpg" },
+                { name: "Carazolol", image: "/carazolol.jpg" },
+                { name: "Talinolol", image: "/talinolol.jpg" },
+                { name: "Tertatolol", image: "/tertatolol.jpg" },
+                { name: "Celiprolol", image: "/celiprolol.jpg" },
+                { name: "Tilisolol", image: "/tilisolol.jpg" }
+            ],
+            "Non-Selective β Antagonists": [
+                { name: "Pronethalol", image: "/pronethalol.jpg" },
+                { name: "Propranolol", image: "/propranolol.jpg" },
+                { name: "Levobunolol", image: "/levobunolol.jpg" },
+                { name: "Metipranolol", image: "/metipranolol.jpg" },
+                { name: "Nadolol", image: "/nadolol.jpg" },
+                { name: "Pindolol", image: "/pindolol.jpg" },
+                { name: "Timolol", image: "/timolol.jpg" }
+            ],
+            "Mixed α and β Antagonists": [
+                { name: "Carvedilol", image: "/carvedilol.jpg" }
+            ]
+        }
     }
 };
 
